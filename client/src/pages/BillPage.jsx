@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Header from '../components/Header/Header'
-import { Table, Card, Button, Modal } from 'antd'
+import { Table, Card, Button } from 'antd'
 import PrintBill from '../components/Bill/PrintBill';
 
 const dataSource = [

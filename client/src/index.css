@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Electrolize&family=Nunito:wght@200;300;400;500&family=Poppins:wght@300;400&display=swap');
-
-body {
+@import url("https://fonts.googleapis.com/css2?family=Electrolize&display=swap");
+body { 
   margin: 0;
   font-family: "Electrolize", sans-serif;
+  @apply bg-gray-50
 }
 
 .ant-btn-primary {

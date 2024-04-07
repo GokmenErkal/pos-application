@@ -9,7 +9,7 @@ const StatisticsCard = ({ image, title, amount }) => {
                         <img src={`/images/${image}.png`} alt="" />
                     </div>
                     <div className='text-white'>
-                        <p className='mb-2 text-lg font-medium text-gray-400'>{title}</p>
+                        <p className='mb-2 text-lg font-medium text-gray-500'>{title}</p>
                         <p className='text-xl font-semibold text-gray-200'>{amount}</p>
                     </div>
                 </div>

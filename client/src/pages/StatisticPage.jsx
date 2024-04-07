@@ -1,98 +1,58 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Header from '../components/Header/Header'
 import StatisticsCard from '../components/Statistics/StatisticsCard'
 import { Area, Pie } from "@ant-design/plots"
 
 const StatisticPage = () => {
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-        asyncFetch();
-    }, []);
-
-    const asyncFetch = () => {
-        fetch(
-            "https://gw.alipayobjects.com/os/bmw-prod/360c3eae-0c73-46f0-a982-4746a6095010.json"
-        )
-            .then((response) => response.json())
-            .then((json) => setData(json))
-            .catch((error) => {
-                console.log("fetch data failed", error);
-            });
-    };
-
-    const data2 = [
-        {
-            type: '分类一',
-            value: 27,
-        },
-        {
-            type: '分类二',
-            value: 25,
-        },
-        {
-            type: '分类三',
-            value: 18,
-        },
-        {
-            type: '分类四',
-            value: 15,
-        },
-        {
-            type: '分类五',
-            value: 10,
-        },
-        {
-            type: '其他',
-            value: 5,
-        },
-    ];
-
     const config = {
-        data,
-        xField: "timePeriod",
-        yField: "value",
-        xAxis: {
-            range: [0, 1],
+        data: {
+            type: 'fetch',
+            value: 'https://assets.antv.antgroup.com/g2/aapl.json',
         },
+        xField: (d) => new Date(d.date),
+        yField: 'close',
     };
 
     const config2 = {
-        appendPadding: 10,
-        data: data2,
-        angleField: "value",
-        colorField: "type",
-        radius: 1,
+        data: [
+          { type: '分类一', value: 27 },
+          { type: '分类二', value: 25 },
+          { type: '分类三', value: 18 },
+          { type: '分类四', value: 15 },
+          { type: '分类五', value: 10 },
+          { type: '其他', value: 5 },
+        ],
+        angleField: 'value',
+        colorField: 'type',
+        paddingRight: 80,
         innerRadius: 0.6,
         label: {
-            type: "inner",
-            offset: "-50%",
-            content: "{value}",
-            style: {
-                textAlign: "center",
-                fontSize: 14,
-            },
+          text: 'value',
+          style: {
+            fontWeight: 'bold',
+          },
         },
-        interactions: [
-            {
-                type: "element-selected",
-            },
-            {
-                type: "element-active",
-            },
-        ],
-        statistic: {
+        legend: {
+          color: {
             title: false,
-            content: {
-                style: {
-                    whiteSpace: "pre-wrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                },
-                content: "AntV\nG2Plot",
-            },
+            position: 'right',
+            rowPadding: 5,
+          },
         },
-    };
+        annotations: [
+          {
+            type: 'text',
+            style: {
+              text: 'AntV\nCharts',
+              x: '50%',
+              y: '50%',
+              textAlign: 'center',
+              fontSize: 40,
+              fontStyle: 'bold',
+            },
+          },
+        ],
+      };
 
     return (
         <>
