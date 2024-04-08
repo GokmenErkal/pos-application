@@ -31,7 +31,7 @@ const EditCategory = ({ isEditModalOpen, setIsEditModalOpen, categories, setCate
                     <div>
                         <Button type='link' onClick={() => setEditingRow(record)}>Düzenle</Button>
                         <Button type='text' htmlType='submit'>Kaydet</Button>
-                        <Button type='text' danger>Sil</Button>
+                        <Button type='text' danger onClick={() => deleteCategory(record._id)}>Sil</Button>
                     </div>
                 )
             }
@@ -46,11 +46,26 @@ const EditCategory = ({ isEditModalOpen, setIsEditModalOpen, categories, setCate
                 if (item._id === editingRow._id) {
                     return { ...item, title: values.title }
                 }
-                return item; 
+                return item;
             }))
         } catch (error) {
-            message.success("Bir şeyler ters gitti")
+            message.error("Bir şeyler ters gitti")
             console.log(error);
+        }
+    }
+
+    const deleteCategory = async (categoryId) => {
+        if (window.confirm("Emin misiniz?")) {
+            try {
+                await axios.delete("http://localhost:5000/api/categories/delete-category", { data: { categoryId } })
+                
+                setCategories(categories.filter((item) => item._id !== categoryId))
+                message.success("Kategori başarıyla silindi.");
+
+            } catch (error) {
+                message.error("Bir şeyler ters gitti")
+                console.log(error);
+            }
         }
     }
 
