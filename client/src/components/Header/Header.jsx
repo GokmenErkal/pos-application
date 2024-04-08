@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from "react-redux"
 
 import { Badge, Input } from "antd"
 import {
@@ -14,6 +15,12 @@ import {
 import { Link } from 'react-router-dom';
 
 const Header = () => {
+
+    const cart = useSelector((state) => state.cart)
+
+    const cartCounter = cart.cartItems.length
+    const x = 0
+
     return (
         <div className='border-b mb-6'>
             <header className='py-4 px-6 flex justify-between items-center gap-10'>
@@ -35,7 +42,10 @@ const Header = () => {
                         <HomeOutlined className='justify-center md:text-2xl text-xl' />
                         <span className='md: text-xs text-[10px]'>Ana Sayfa</span>
                     </Link>
-                    <Badge count={5} className='md:flex hidden'>
+                    <Badge
+                        count={cartCounter}
+                        className='md:flex hidden'
+                    >
                         <Link to='/cart' className='menu-link flex flex-col hover:text-[#40a9ff]'>
                             <ShoppingCartOutlined className='justify-center md:text-2xl text-xl' />
                             <span className='md: text-xs text-[10px]'>Sepet</span>

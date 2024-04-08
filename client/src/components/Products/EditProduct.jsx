@@ -62,16 +62,12 @@ const EditProduct = () => {
     }
   };
 
-  const deleteCategory = (id) => {
+  const deleteProduct = async (productId) => {
     if (window.confirm("Emin misiniz?")) {
       try {
-        fetch("http://localhost:5000/api/categories/delete-category", {
-          method: "DELETE",
-          body: JSON.stringify({ categoryId: id }),
-          headers: { "Content-type": "application/json; charset=UTF-8" },
-        });
-        message.success("Kategori başarıyla silindi.");
-        setCategories(categories.filter((item) => item._id !== id));
+        await axios.delete("http://localhost:5000/api/products/delete-product", { data: { productId } });
+        message.success("Ürün başarıyla silindi.");
+        setCategories(products.filter((item) => item._id !== productId));
       } catch (error) {
         message.error("Bir şeyler yanlış gitti.");
         console.log(error);
@@ -125,7 +121,7 @@ const EditProduct = () => {
             <Button
               type="link"
               danger
-              onClick={() => deleteCategory(record._id)}
+              onClick={() => deleteProduct(record._id)}
             >
               Sil
             </Button>
