@@ -1,44 +1,86 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from "react-redux";
+import { Table, Button, message } from 'antd'
+import axios from "axios"
+
 import Header from '../components/Header/Header'
-import { Table, Card, Button } from 'antd'
 import PrintBill from '../components/Bill/PrintBill';
-
-const dataSource = [
-    {
-        key: '1',
-        name: 'Mike',
-        age: 32,
-        address: '10 Downing Street',
-    },
-    {
-        key: '2',
-        name: 'John',
-        age: 42,
-        address: '10 Downing Street',
-    },
-];
-
-const columns = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-    },
-    {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
-    },
-];
 
 const BillPage = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [billItems, setBillItems] = useState([]);
+    const [customer, setCustomer] = useState();
+
+    useEffect(() => {
+        const getBills = async () => {
+            try {
+                const res = await axios.get("http://localhost:5000/api/bills/get-all");
+                setBillItems(res.data)
+                console.log(res);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getBills()
+    }, [])
+
+    const columns = [
+        {
+            title: 'Müşteri Adı',
+            dataIndex: 'customerName',
+            key: 'customerName',
+        },
+        {
+            title: 'Telefon Numarası',
+            dataIndex: 'customerPhoneNumber',
+            key: 'customerPhoneNumber',
+        },
+        {
+            title: 'Oluşturma Tarihi',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            render: (text) => {
+                return (
+                    <span>{text.substring(0, 10)}</span>
+                )
+            }
+        },
+        {
+            title: 'Ödeme Yöntemi',
+            dataIndex: 'paymentMode',
+            key: 'paymentMode',
+        },
+        {
+            title: 'Toplam Fiyat',
+            dataIndex: 'totalAmount',
+            key: 'totalAmount',
+            render: (text) => {
+                return (
+                    <span>{text.toFixed(2)}$</span>
+                )
+            }
+        },
+        {
+            title: 'Actions',
+            dataIndex: "actions",
+            key: "actions",
+            render: (_, record) => {
+                return (
+                    <Button
+                        type='link'
+                        className='pl-0 '
+                        onClick={() => {
+                            setIsModalOpen(true)
+                            setCustomer(record)
+                        }}
+                    >
+                        Yazdır
+                    </Button>
+                )
+            }
+        },
+    ];
 
     return (
         <>
@@ -46,25 +88,18 @@ const BillPage = () => {
             <div className='px-6'>
                 <h1 className='text-4xl font-bold text-center mb-4'>Faturalar</h1>
                 <Table
-                    dataSource={dataSource}
+                    dataSource={billItems}
                     columns={columns}
                     pagination={false}
                     bordered
+                    scroll={{
+                        x:1000,
+                        y:300,
+                    }}
                 />
-                <div className="cart-total flex justify-end mt-4">
-                    <Card className='w-72 '>
-                        <Button
-                            type='primary'
-                            className='w-full mt-2'
-                            size='large'
-                            onClick={() => setIsModalOpen(true)}
-                        >
-                            Yazdır
-                        </Button>
-                    </Card>
-                </div>
+
             </div>
-            <PrintBill isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+            <PrintBill isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} customer={customer} />
         </>
     )
 }

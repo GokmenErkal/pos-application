@@ -87,14 +87,17 @@ const Cartpage = () => {
             title: 'Toplam Fiyat',
             dataIndex: 'total',
             key: 'total',
-            render: (text) => {
+            render: (text, record) => {
+                console.log(record);
                 return (
-                    <span>{text}{" "}$</span>
+                    <span>{record.price * record.quantity}{" "}$</span>
                 )
             }
         },
         {
             title: 'Actions',
+            dataIndex: "actions",
+            key: "actions",
             render: (_, record) => {
                 return (
                     <Popconfirm
@@ -113,7 +116,6 @@ const Cartpage = () => {
                             Sil
                         </Button>
                     </Popconfirm>
-
                 )
             }
         },
@@ -127,26 +129,31 @@ const Cartpage = () => {
                     columns={columns}
                     pagination={false}
                     bordered
+                    scroll={{
+                        x: 1200,
+                        y: 300
+                    }}
                 />
                 <div className="cart-total flex justify-end mt-4">
                     <Card className='w-72 '>
                         <div className='flex justify-between'>
                             <span>Ara Toplam</span>
-                            <span>549.00$</span>
+                            <span>{(cart.total).toFixed(2) > 0 ? (cart.total).toFixed(2) : 0}$</span>
                         </div>
                         <div className='flex justify-between my-2'>
-                            <span>KDV Toplam %8</span>
-                            <span className='text-red-500'>+43.92$</span>
+                            <span>KDV %{cart.tax}</span>
+                            <span className='text-red-500'>{(cart.total * cart.tax) / 100}$</span>
                         </div>
                         <div className='flex justify-between'>
                             <b>Toplam</b>
-                            <b>592.92$</b>
+                            <b>{cart.total + (cart.total * cart.tax) / 100}$</b>
                         </div>
                         <Button
                             type='primary'
                             className='w-full mt-2'
                             size='large'
                             onClick={() => setIsModalOpen(true)}
+                            disabled={cart.cartItems.length === 0}
                         >
                             Sipariş Oluştur
                         </Button>

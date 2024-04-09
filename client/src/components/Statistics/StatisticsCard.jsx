@@ -10,7 +10,7 @@ const StatisticsCard = ({ image, title, amount }) => {
                     </div>
                     <div className='text-white'>
                         <p className='mb-2 text-lg font-medium text-gray-500'>{title}</p>
-                        <p className='text-xl font-semibold text-gray-200'>{amount}</p>
+                        <p className='text-xl font-semibold text-gray-200'>{amount.toFixed(2)}$</p>
                     </div>
                 </div>
             </div>

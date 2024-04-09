@@ -1,10 +1,35 @@
 import React from 'react'
-import { Modal, Form, Input, Select, Card, Button } from "antd"
+import axios from "axios"
+import { useSelector, useDispatch } from "react-redux"
+import { reset } from '../../redux/cartSlice'
+import { Modal, Form, Input, Select, Card, Button, message } from "antd"
+import { useNavigate } from "react-router-dom"
 
 const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
 
-    const onFinish = (values) => {
-        console.log("Received values of form:", values);
+    const cart = useSelector((state) => state.cart);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const onFinish = async (values) => {
+        try {
+            const res = await axios.post("http://localhost:5000/api/bills/add-bill", {
+                ...values,
+                subTotal: cart.total,
+                tax: ((cart.total * cart.tax) / 100).toFixed(2),
+                totalAmount: (cart.total + (cart.total * cart.tax) / 100).toFixed(2),
+                cartItems: cart.cartItems,
+            })
+
+            if (res.status === 200) {
+                message.success("Fatura Başarıyla Oluşturuldu.")
+                dispatch(reset())
+                navigate("/bills")
+            }
+        } catch (error) {
+            message.error("Bir şeyler yanlış gitti.")
+            console.log(error);
+        }
     }
 
     return (
@@ -26,7 +51,7 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
                     <Form.Item
                         label="Tel No"
                         rules={[{ required: true, message: "Tel No alanı boş geçilemez!" }]}
-                        name={"phoneNumberp"}
+                        name={"customerPhoneNumber"}
                     >
                         <Input placeholder='Bir telefon numrası yazınız...' maxLength={11} />
                     </Form.Item>
@@ -43,27 +68,25 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
                     <Card>
                         <div className='flex justify-between'>
                             <span>Ara Toplam</span>
-                            <span>549.00$</span>
+                            <span>{(cart.total).toFixed(2) > 0 ? (cart.total).toFixed(2) : 0}$</span>
                         </div>
                         <div className='flex justify-between my-2'>
-                            <span>KDV Toplam %8</span>
-                            <span className='text-red-500'>+43.92$</span>
+                            <span>KDV %{cart.tax}</span>
+                            <span className='text-red-500'>{(cart.total * cart.tax) / 100}$</span>
                         </div>
                         <div className='flex justify-between'>
                             <b>Toplam</b>
-                            <b>592.92$</b>
+                            <b>{cart.total + (cart.total * cart.tax) / 100}$</b>
                         </div>
-                        <div className='flex justify-end'>
-                            <Button
-                                type='primary'
-                                className=' mt-4'
-                                size='large'
-                                onClick={() => setIsModalOpen(true)}
-                                htmlType='submit'
-                            >
-                                Sipariş Oluştur
-                            </Button>
-                        </div>
+                        <Button
+                            type='primary'
+                            className='w-full mt-2'
+                            size='large'
+                            htmlType='submit'
+                            onClick={() => setIsModalOpen(true)}
+                        >
+                            Sipariş Oluştur
+                        </Button>
                     </Card>
                 </Form>
             </Modal>
