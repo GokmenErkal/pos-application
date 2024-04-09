@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors")
+const logger = require("morgan")
 
 // Routes
 const categoryRoute = require("./routes/categories");
@@ -26,6 +27,7 @@ const connect = async () => {
 }
 
 // middlewares
+app.use(logger("dev"))
 app.use(express.json());
 app.use(cors());
 
