@@ -12,7 +12,7 @@ const authRoute = require("./routes/auth");
 const userRoute = require("./routes/users");
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 dotenv.config();
 

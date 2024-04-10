@@ -14,7 +14,7 @@ const Register = () => {
     const onFinish = async (values) => {
         setLoading(true)
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/register", values);
+            const res = await axios.post(process.env.REACT_APP_SERVER_URL + "/api/auth/register", values);
 
             if (res.status === 200) {
                 message.success("Kayıt işlemi başarılı.");

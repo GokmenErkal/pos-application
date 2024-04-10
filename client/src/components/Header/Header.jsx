@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import "./index.css"
 
 import { Badge, Input, message } from "antd"
@@ -21,6 +21,9 @@ const Header = ({ setSearch }) => {
     const cart = useSelector((state) => state.cart)
     const cartCounter = cart.cartItems.length
     const navigate = useNavigate();
+    const { pathname } = useLocation();
+
+    console.log(pathname);
 
     const logOut = () => {
         if (window.confirm("Çıkış yapmak istediğinize emin misiniz?")) {
@@ -38,17 +41,23 @@ const Header = ({ setSearch }) => {
                         <h2 className="text-2xl font-bold md:text-4xl">LOGO</h2>
                     </a>
                 </div>
-                <div className="header-search flex-1 flex justify-center">
+                <div
+                    className="header-search flex-1 flex justify-center"
+                    onClick={() => {
+                        pathname !== "/" && navigate("/");
+                    }}
+                >
                     <Input
                         size="large"
                         placeholder="Ürün ara..."
                         prefix={<SearchOutlined />}
                         className='rounded-full max-w-[800px]'
+
                         onChange={(e) => setSearch(e.target.value.toLowerCase())}
                     />
                 </div>
                 <div className="menu-links">
-                    <Link to='/' className='menu-link'>
+                    <Link to='/' className={`menu-link ${pathname === "/" && "active"}`}>
                         <HomeOutlined className='justify-center md:text-2xl text-xl' />
                         <span className='md: text-xs text-[10px]'>Ana Sayfa</span>
                     </Link>
@@ -56,30 +65,30 @@ const Header = ({ setSearch }) => {
                         count={cartCounter}
                         className='md:flex hidden'
                     >
-                        <Link to='/cart' className='menu-link'>
+                        <Link to='/cart' className={`menu-link ${pathname === "/cart" && "active"}`}>
                             <ShoppingCartOutlined className='justify-center md:text-2xl text-xl' />
                             <span className='md: text-xs text-[10px]'>Sepet</span>
                         </Link>
                     </Badge>
-                    <Link to='/bills' className='menu-link'>
+                    <Link to='/bills' className={`menu-link ${pathname === "/bills" && "active"}`}>
                         <CopyOutlined className='justify-center md:text-2xl text-xl' />
                         <span className='md: text-xs text-[10px]'>Faturalar</span>
                     </Link>
-                    <Link to='/customers' className='menu-link'>
+                    <Link to='/customers' className={`menu-link ${pathname === "/customers" && "active"}`}>
                         <UserOutlined className='justify-center md:text-2xl text-xl' />
                         <span className='md: text-xs text-[10px]'>Müşteriler</span>
                     </Link>
-                    <Link to='/statistic' className='menu-link'>
+                    <Link to='/statistic' className={`menu-link ${pathname === "/statistic" && "active"}`}>
                         <BarChartOutlined className='justify-center md:text-2xl text-xl' />
                         <span className='md: text-xs text-[10px]'>İstatistikler</span>
                     </Link>
-                    <Link to='/login' className='menu-link' onClick={logOut}>
+                    <Link to='/login' className={`menu-link `} onClick={logOut}>
                         <LogoutOutlined className='justify-center md:text-2xl text-xl' />
                         <span className='md: text-xs text-[10px]'>Çıkış</span>
                     </Link>
                 </div>
                 <Badge count={cart.cartItems.length} className='md:hidden flex'>
-                    <Link to='/' className='menu-link'>
+                    <Link to='/cart' className={`menu-link ${pathname === "/cart" && "active"}`}>
                         <ShoppingCartOutlined className='justify-center text-2xl' />
                         <span className='md: text-xs text-[10px]'>Sepet</span>
                     </Link>

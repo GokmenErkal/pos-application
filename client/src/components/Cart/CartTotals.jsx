@@ -71,7 +71,7 @@ const CartTotals = () => {
                 <div className='border-t border-b'>
                     <div className='flex justify-between p-2'>
                         <b>Ara Toplam</b>
-                        <span>{(cart.total).toFixed(2) > 0 ? (cart.total).toFixed(2) : 0}$</span>
+                        <span>{cart.total.toFixed(2)}$</span>
                     </div>
                     <div className='flex justify-between p-2'>
                         <b>KDV %{cart.tax}</b>

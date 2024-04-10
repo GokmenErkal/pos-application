@@ -13,7 +13,7 @@ const EditProduct = () => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/products/get-all");
+        const res = await fetch(process.env.REACT_APP_SERVER_URL + "/api/products/get-all");
         const data = await res.json();
         setProducts(data);
       } catch (error) {
@@ -27,7 +27,7 @@ const EditProduct = () => {
   useEffect(() => {
     const getCategories = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/categories/get-all");
+        const res = await axios.get(process.env.REACT_APP_SERVER_URL + "/api/categories/get-all");
         const data = res.data;
         setCategories(
           data.map((item) => {
@@ -43,7 +43,7 @@ const EditProduct = () => {
 
   const onFinish = async (values) => {
     try {
-      await axios.put("http://localhost:5000/api/products/update-product",
+      await axios.put(process.env.REACT_APP_SERVER_URL + "/api/products/update-product",
         { ...values, productId: editingItem._id }
       )
 
@@ -65,7 +65,7 @@ const EditProduct = () => {
   const deleteProduct = async (productId) => {
     if (window.confirm("Emin misiniz?")) {
       try {
-        await axios.delete("http://localhost:5000/api/products/delete-product", { data: { productId } });
+        await axios.delete(process.env.REACT_APP_SERVER_URL + "/api/products/delete-product", { data: { productId } });
         message.success("Ürün başarıyla silindi.");
         setCategories(products.filter((item) => item._id !== productId));
       } catch (error) {

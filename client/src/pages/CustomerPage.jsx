@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Table, Button, Input, Space } from 'antd'
+import { Table, Button, Input, Space, Spin } from 'antd'
 import { SearchOutlined } from '@ant-design/icons';
 
 import axios from "axios"
@@ -9,7 +9,7 @@ import Header from '../components/Header/Header'
 
 const CustomerPage = () => {
 
-  const [billItems, setBillItems] = useState([]);
+  const [billItems, setBillItems] = useState();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -17,7 +17,7 @@ const CustomerPage = () => {
   useEffect(() => {
     const getBills = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/bills/get-all");
+        const res = await axios.get(process.env.REACT_APP_SERVER_URL + "/api/bills/get-all");
         setBillItems(res.data)
         console.log(res);
       } catch (error) {
@@ -169,19 +169,25 @@ const CustomerPage = () => {
   return (
     <>
       <Header />
-      <div className='px-6'>
-        <h1 className='text-4xl font-bold text-center mb-4'>Müşterilerim</h1>
-        <Table
-          dataSource={billItems}
-          columns={columns}
-          pagination={false}
-          bordered
-          scroll={{
-            x: 1000,
-            y: 300
-          }}
-        />
-      </div>
+      <h1 className='text-4xl font-bold text-center mb-4'>Müşterilerim</h1>
+      {
+        billItems ? (
+          <div className='px-6'>
+            <Table
+              dataSource={billItems}
+              columns={columns}
+              pagination={false}
+              bordered
+              scroll={{
+                x: 1000,
+                y: 300
+              }}
+              rowKey={"_id"}
+            />
+          </div>
+        ) :
+          <Spin size="large" className="absolute h-screen w-screen top-1/2 flex justify-center" />
+      }
     </>
   )
 }

@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom"
+import React, { useEffect } from "react";
 
 import HomePage from "./pages/HomePage";
 import Cartpage from "./pages/Cartpage";
@@ -9,7 +10,18 @@ import StatisticPage from "./pages/StatisticPage";
 import Login from "./pages/auth/Login";
 import ProductPage from "./pages/ProductPage";
 
+import { useSelector } from "react-redux"
+
 function App() {
+
+  const cart = useSelector(state => state.cart)
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart))
+
+  }, [cart])
+
+
   return (
     <>
       <BrowserRouter>

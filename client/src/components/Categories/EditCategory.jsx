@@ -40,7 +40,7 @@ const EditCategory = ({ isEditModalOpen, setIsEditModalOpen, categories, setCate
 
     const onFinish = async (values) => {
         try {
-            await axios.put("http://localhost:5000/api/categories/update-category", { ...values, categoryId: editingRow._id });
+            await axios.put(process.env.REACT_APP_SERVER_URL + "/api/categories/update-category", { ...values, categoryId: editingRow._id });
             message.success("Kategori başarıyla güncellendi")
             setCategories(categories.map(item => {
                 if (item._id === editingRow._id) {
@@ -57,7 +57,7 @@ const EditCategory = ({ isEditModalOpen, setIsEditModalOpen, categories, setCate
     const deleteCategory = async (categoryId) => {
         if (window.confirm("Emin misiniz?")) {
             try {
-                await axios.delete("http://localhost:5000/api/categories/delete-category", { data: { categoryId } })
+                await axios.delete(process.env.REACT_APP_SERVER_URL + "/api/categories/delete-category", { data: { categoryId } })
                 
                 setCategories(categories.filter((item) => item._id !== categoryId))
                 message.success("Kategori başarıyla silindi.");

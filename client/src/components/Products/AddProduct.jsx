@@ -7,7 +7,7 @@ const AddProduct = ({ isAddModalOpen, setIsAddModalOpen, categories, products, s
 
     const onFinish = async (values) => {
         try {
-            await axios.post("http://localhost:5000/api/products/add-product", values);
+            await axios.post(process.env.REACT_APP_SERVER_URL + "/api/products/add-product", values);
             message.success("Ürün başarıyla eklendi");
             setProducts([
                 ...products,

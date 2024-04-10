@@ -14,7 +14,7 @@ const Login = () => {
     const onFinish = async (values) => {
         setLoading(true)
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/login", values);
+            const res = await axios.post(process.env.REACT_APP_SERVER_URL + "/api/auth/login", values);
             console.log(res);
 
             const user = await res.data;

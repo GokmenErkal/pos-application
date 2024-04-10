@@ -7,7 +7,7 @@ const AddCategory = ({ isAddModalOpen, setIsAddModalOpen, categories, setCategor
 
     const onFinish = async (values) => {
         try {
-            await axios.post("http://localhost:5000/api/categories/add-category", values);
+            await axios.post(process.env.REACT_APP_SERVER_URL + "/api/categories/add-category", values);
             message.success("Kategori başarıyla eklendi");
             setCategories([
                 ...categories,

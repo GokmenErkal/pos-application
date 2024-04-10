@@ -13,7 +13,7 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
 
     const onFinish = async (values) => {
         try {
-            const res = await axios.post("http://localhost:5000/api/bills/add-bill", {
+            const res = await axios.post(process.env.REACT_APP_SERVER_URL + "/api/bills/add-bill", {
                 ...values,
                 subTotal: cart.total,
                 tax: ((cart.total * cart.tax) / 100).toFixed(2),
